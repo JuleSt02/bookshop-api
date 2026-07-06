@@ -1,0 +1,44 @@
+{
+  "name": "bookshop-api",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "start": "tsx watch src/index.ts",
+    "build": "tsc",
+    "lint": "eslint src/",
+    "prettier": "prettier --check src/",
+    "prettier:fix": "prettier --write src/",
+    "typecheck": "tsc --noEmit",
+    "test": "jest",
+    "prisma:sync": "npx prisma migrate dev"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/JuleSt02/bookshop-api.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/JuleSt02/bookshop-api/issues"
+  },
+  "homepage": "https://github.com/JuleSt02/bookshop-api#readme",
+  "dependencies": {
+    "@prisma/client": "^6.19.3",
+    "@sentry/node": "^10.62.0",
+    "bcrypt": "^6.0.0",
+    "dotenv": "^17.4.2",
+    "express": "^5.2.1",
+    "sentry": "^0.38.0",
+    "zod": "^4.4.3"
+  },
+  "devDependencies": {
+    "@types/express": "^5.0.6",
+    "@types/node": "^26.0.1",
+    "jest": "^30.4.2",
+    "prisma": "^6.19.3",
+    "tsx": "^4.22.4",
+    "typescript": "^6.0.3"
+  }
+}
