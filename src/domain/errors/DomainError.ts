@@ -1,10 +1,5 @@
-
-
 export abstract class DomainError extends Error {
-    
-    abstract readonly name: string;
+  //constructor inherited from Error
 
+  abstract readonly name: string;
 }
-
-
-

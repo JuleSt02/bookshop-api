@@ -1,8 +1,17 @@
-import express from 'express';
+import express from "express";
+import { booksRouter } from "./ui/book/routes/book-routes";
+import { userRouter } from "./ui/user/routes/user-routes";
+import { errorHandlerMiddleWare } from "./ui/shared/middlewares/error-middleware";
 
-const api = express();
+const app = express();
 
-api.use(express.json());
+app.use(express.json());
 
+app.use("/books", booksRouter);
 
-export { api };
+app.use("/authentication", userRouter);
+
+//always last to cath any error during the flow
+app.use(errorHandlerMiddleWare);
+
+export { app };

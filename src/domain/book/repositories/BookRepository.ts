@@ -1,11 +1,7 @@
-
-import { Book } from "../Book"
-import { CreateBookUseCaseInput } from "../use-cases/create-book"
-
+import { Book } from "../Book";
+import { CreateBookUseCaseInput } from "../use-cases/create-book";
 
 export interface BookRepository {
-
-    create : (params: CreateBookUseCaseInput) => Promise<Book>,
-    findById: (params: number) => Promise<Book | null>,
-
+  create: (params: CreateBookUseCaseInput) => Promise<Book>;
+  findById: (params: number) => Promise<Book | null>;
 }
