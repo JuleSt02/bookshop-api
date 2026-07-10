@@ -10,10 +10,19 @@ export const authenticationMiddleware = (
   const token = req.headers.authorization;
 
   if (!token) {
-    throw new UnauthorizedError("User is not authorized");
+    throw new UnauthorizedError("Authentication required");
   }
 
   const sanitzedToken = token.replace("Bearer ", "");
 
   const securityService = new SecuritityServiceImplementation();
+
+  const decodedPayload = securityService.verifyToken(sanitzedToken);
+
+  if (!decodedPayload) {
+    throw new UnauthorizedError("Authentication required.");
+  } else {
+    req.userId = decodedPayload?.userId;
+    next();
+  }
 };

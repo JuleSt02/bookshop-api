@@ -2,6 +2,7 @@ import { BookRepository } from "../../../domain/book/repositories/BookRepository
 import { Book, BookGenre, BookStatus } from "../../../domain/book/Book";
 import { CreateBookUseCaseInput } from "../../../domain/book/use-cases/create-book";
 import { prisma } from "../../prisma-client";
+import { EditableBookInput } from "../../../domain/book/use-cases/edit-book";
 
 export class PrismaBookRepository implements BookRepository {
   private readonly prisma = prisma;
@@ -41,5 +42,39 @@ export class PrismaBookRepository implements BookRepository {
       ownerId: prismaBook.ownerId,
       soldAt: prismaBook.soldAt,
     });
+  }
+
+  async edit(params: EditableBookInput): Promise<Book> {
+    const prismaBook = await this.prisma.book.update({
+      where: {
+        id: params.id,
+      },
+
+      data: {
+        title: params.title,
+        description: params.description,
+        author: params.author,
+        price: params.price,
+        genre: params.genre,
+      },
+    });
+
+    return new Book({
+      id: prismaBook.id,
+      createdAt: prismaBook.createdAt,
+      updatedAt: prismaBook.updatedAt,
+      title: prismaBook.title,
+      description: prismaBook.description,
+      author: prismaBook.author,
+      price: prismaBook.price,
+      genre: prismaBook.genre as BookGenre,
+      status: prismaBook.status as BookStatus,
+      ownerId: prismaBook.ownerId,
+      soldAt: prismaBook.soldAt,
+    });
+  }
+
+  async delete(params: number): Promise<void> {
+    await this.prisma.book.delete({ where: { id: params } });
   }
 }

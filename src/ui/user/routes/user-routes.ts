@@ -7,6 +7,6 @@ const prisma = new PrismaClient();
 
 export const userRouter = Router();
 
-userRouter.post("/signup", registerUserController);
+userRouter.post("signup", registerUserController);
 
-userRouter.post("/signin", loginUserController);
+userRouter.post("signin", loginUserController);
