@@ -3,7 +3,15 @@ import { Book, BookGenre, BookStatus } from "../../../domain/book/Book";
 import { CreateBookUseCaseInput } from "../../../domain/book/use-cases/create-book";
 import { prisma } from "../../prisma-client";
 import { EditableBookInput } from "../../../domain/book/use-cases/edit-book";
-
+import { date } from "zod";
+import { MarkBookAsSoldInput } from "../../../domain/book/use-cases/buy-book";
+import {
+  Book as PrismaBook,
+  BookGenre as PrismaGenre,
+} from "@prisma/client";
+import { Pagination } from "../../../domain/shared/Pagination";
+import { FindManyBooksInput } from "../../../domain/book/use-cases/find-books";
+import { BooksByUserUseCaseInput } from "../../../domain/book/use-cases/find-by-userid";
 export class PrismaBookRepository implements BookRepository {
   private readonly prisma = prisma;
 
@@ -14,7 +22,24 @@ export class PrismaBookRepository implements BookRepository {
       },
     });
 
-    return book;
+    if(!book) {
+      return null
+    }
+    return this.transformToDomain(book)
+
+    }
+
+  
+  async findByUser(id:number): Promise<Book[]|null> {
+
+    const books = await this.prisma.book.findMany({
+      where: {
+        ownerId : id,
+      }
+    })
+
+    const domainBooks = books.map(book => this.transformToDomain(book));
+    return domainBooks;
   }
 
   async create(params: CreateBookUseCaseInput): Promise<Book> {
@@ -28,20 +53,7 @@ export class PrismaBookRepository implements BookRepository {
         ownerId: params.ownerId,
       },
     });
-
-    return new Book({
-      id: prismaBook.id,
-      createdAt: prismaBook.createdAt,
-      updatedAt: prismaBook.updatedAt,
-      title: prismaBook.title,
-      description: prismaBook.description,
-      author: prismaBook.author,
-      price: prismaBook.price,
-      genre: prismaBook.genre as BookGenre,
-      status: prismaBook.status as BookStatus,
-      ownerId: prismaBook.ownerId,
-      soldAt: prismaBook.soldAt,
-    });
+    return this.transformToDomain(prismaBook)
   }
 
   async edit(params: EditableBookInput): Promise<Book> {
@@ -59,7 +71,84 @@ export class PrismaBookRepository implements BookRepository {
       },
     });
 
-    return new Book({
+    return this.transformToDomain(prismaBook)
+  }
+
+  async delete(params: number): Promise<void> {
+    await this.prisma.book.delete({ where: { id: params } });
+  }
+
+
+  async markAsSold(params:MarkBookAsSoldInput) : Promise<Book> {
+    const prismaBook = await this.prisma.book.update({where: {id: params.id},
+    data: {status : params.status , soldAt: params.soldAtDate}})
+
+    return this.transformToDomain(prismaBook)
+  }
+
+
+async findMany(params: FindManyBooksInput): Promise<{ books: Book[], total: number }> {
+  
+  
+
+      const prismaBooks = await this.prisma.book.findMany({
+        where: {
+          status: params.status,
+          ...(params.search && {
+            OR: [
+              {
+                title: {
+                  contains: params.search,
+                  mode: "insensitive",
+                },
+              },
+              {
+                author: {
+                  contains: params.search,
+                  mode: "insensitive",
+                },
+              },
+            ],
+          }),
+        },
+        skip: (params.pagination.page - 1) * params.pagination.limit,
+        take: params.pagination.limit,
+      });
+
+      const booksTotalCount = await this.prisma.book.count({
+        where: {
+          status: params.status,
+          ...(params.search && {
+            OR: [
+              {
+                title: {
+                  contains: params.search,
+                  mode: "insensitive",
+                },
+              },
+              {
+                author: {
+                  contains: params.search,
+                  mode: "insensitive",
+                },
+              },
+            ],
+          }),
+        },
+      });
+
+  const domainBooks = prismaBooks.map(book => this.transformToDomain(book));
+
+  return {
+    books: domainBooks,
+    total: booksTotalCount
+  };
+
+}
+
+  private transformToDomain(prismaBook: PrismaBook ) : Book  {
+
+      return new Book({
       id: prismaBook.id,
       createdAt: prismaBook.createdAt,
       updatedAt: prismaBook.updatedAt,
@@ -71,10 +160,8 @@ export class PrismaBookRepository implements BookRepository {
       status: prismaBook.status as BookStatus,
       ownerId: prismaBook.ownerId,
       soldAt: prismaBook.soldAt,
-    });
-  }
 
-  async delete(params: number): Promise<void> {
-    await this.prisma.book.delete({ where: { id: params } });
-  }
+  });
 }
+
+}; 

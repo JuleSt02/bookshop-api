@@ -2,12 +2,14 @@ import express from "express";
 import { booksRouter } from "./ui/book/routes/book-routes";
 import { userRouter } from "./ui/user/routes/user-routes";
 import { errorHandlerMiddleWare } from "./ui/shared/middlewares/error-middleware";
+import { meRouter } from "./ui/me/routes/me-routes";
 
 const app = express();
 
 app.use(express.json());
 
 app.use("/books", booksRouter);
+app.use("/me", meRouter)
 
 app.use("/authentication", userRouter);
 
