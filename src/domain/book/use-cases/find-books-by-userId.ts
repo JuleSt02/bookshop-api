@@ -16,7 +16,7 @@ export class FindBooksByUserUseCase {
         this.bookRepository = bookRepository;
     }
 
-    async execute(input : BooksByUserUseCaseInput ): Promise<Book[]|null>  {
+    async execute(input : BooksByUserUseCaseInput ): Promise<Book[]>  {
 
         const booksByUserId = await this.bookRepository.findByUser(input.userId)
         return booksByUserId;

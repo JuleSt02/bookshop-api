@@ -23,7 +23,7 @@ export class FindBooksUseCase {
     async execute (input: FindBooksUseCaseInput): Promise<{books: Book[], total: number}> {
         
 
-        const {books, total} = await this.bookRepository.findMany({...input, status: BookStatus.SOLD})
+        const {books, total} = await this.bookRepository.findMany({...input, status: BookStatus.PUBLISHED})
 
         return {books, total}
 

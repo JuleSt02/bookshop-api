@@ -6,7 +6,8 @@ import { MarkBookAsSoldInput } from "../use-cases/buy-book";
 import { Pagination } from "../../shared/Pagination";
 import { FindBookByIdUseCaseInput } from "../use-cases/find-by-id";
 import { FindManyBooksInput } from "../use-cases/find-books";
-import { BooksByUserUseCaseInput } from "../use-cases/find-by-userid";
+import { BooksByUserUseCaseInput } from "../use-cases/find-books-by-userId";
+import { BookStatus } from "@prisma/client";
 
 export interface BookRepository {
   create: (params: CreateBookUseCaseInput) => Promise<Book>;
@@ -15,6 +16,8 @@ export interface BookRepository {
   delete: (id: number) => Promise<void>;
   markAsSold:(params: MarkBookAsSoldInput) => Promise<Book>;
   findMany(params: FindManyBooksInput) :Promise<{books: Book[], total:number}>;
-  findByUser(id:number) : Promise<Book[]|null>;
+  findByUser(id:number) : Promise<Book[]>;
+  findPublished(status: BookStatus, date:Date): Promise<Book[]>
+
 
 }

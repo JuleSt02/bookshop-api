@@ -7,16 +7,20 @@ const environmentVariablesValidator = z.object({
   JWT_SECRET: z.string(),
   NODE_ENV: z.enum(["local", "staging", "production", "test"]),
   PORT: z.coerce.number(),
+  REDIS_URL : z.url(),
+  MAILDEV_HOST: z.string(),
+  MAILDEV_PORT: z.coerce.number()
 });
 
 type EnvironmentVariables = z.infer<typeof environmentVariablesValidator>;
 
 class EnvironmentService {
-  private environmentVariables: EnvironmentVariables | null;
+  private environmentVariables: EnvironmentVariables | null = null;
 
   load() {
     //Read .env store variables , validate, store  & pt values into process.env
     //initialization method
+    
     if (this.environmentVariables) return;
 
     dotenv.config();

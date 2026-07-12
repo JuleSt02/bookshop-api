@@ -11,7 +11,7 @@ import {
 } from "@prisma/client";
 import { Pagination } from "../../../domain/shared/Pagination";
 import { FindManyBooksInput } from "../../../domain/book/use-cases/find-books";
-import { BooksByUserUseCaseInput } from "../../../domain/book/use-cases/find-by-userid";
+import { BooksByUserUseCaseInput } from "../../../domain/book/use-cases/find-books-by-userId";
 export class PrismaBookRepository implements BookRepository {
   private readonly prisma = prisma;
 
@@ -30,7 +30,7 @@ export class PrismaBookRepository implements BookRepository {
     }
 
   
-  async findByUser(id:number): Promise<Book[]|null> {
+  async findByUser(id:number): Promise<Book[]> {
 
     const books = await this.prisma.book.findMany({
       where: {
@@ -84,6 +84,21 @@ export class PrismaBookRepository implements BookRepository {
     data: {status : params.status , soldAt: params.soldAtDate}})
 
     return this.transformToDomain(prismaBook)
+  }
+
+  async findPublished(status: BookStatus, date:Date):Promise<Book[]> {
+
+    const prismaBooks = await this.prisma.book.findMany({
+      where: {
+        status,
+        createdAt: {
+          lte:date
+        }
+
+      }
+    })
+      const domainBooks = prismaBooks.map(book => this.transformToDomain(book));
+      return domainBooks;
   }
 
 
