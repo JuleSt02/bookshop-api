@@ -1,8 +1,6 @@
 import { BookRepository } from "../repositories/BookRepository";
-import { SecurityService } from "../../user/services/SecurityService";
 import { Book } from "../Book";
 import { ForbiddenOperationError } from "../../errors/ForbiddenOperationError";
-import { UnauthorizedError } from "../../errors/UnauthorizedError";
 import { EntityNotFoundError } from "../../errors/EntityNotFoundError";
 import { BookGenre } from "../Book";
 import { BadSyntaxError } from "../../errors/BadSyntaxError";
@@ -29,7 +27,7 @@ export class EditBookUseCase {
     this.bookRepository = bookRepository;
   }
 
-  async execute(input: EditBookUseCaseInput) {
+  async execute(input: EditBookUseCaseInput): Promise<Book> {
     if (
       !input.book.title ||
       !input.book.description ||

@@ -1,4 +1,3 @@
-import { EntityNotFoundError } from "../../errors/EntityNotFoundError";
 import { UnauthorizedError } from "../../errors/UnauthorizedError";
 import { UserRepository } from "../repositories/UserRepository";
 import { SecurityService } from "../services/SecurityService";

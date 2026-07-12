@@ -39,7 +39,7 @@ export class RegisterUserUseCase {
     if (!validatedPassword) {
       throw new BadSyntaxError("Invalid password.");
     } else {
-      const hashedPassword = await this.securityService.hash(input.email);
+      const hashedPassword = await this.securityService.hash(input.password);
       const newUser = await this.userRepository.create({
         ...input,
         password: hashedPassword,

@@ -1,15 +1,14 @@
 import z from "zod";
 import dotenv from "dotenv";
-import ZodError = require("zod");
 
 const environmentVariablesValidator = z.object({
   DATABASE_URL: z.url(),
   JWT_SECRET: z.string(),
   NODE_ENV: z.enum(["local", "staging", "production", "test"]),
   PORT: z.coerce.number(),
-  REDIS_URL : z.url(),
+  REDIS_URL: z.url(),
   MAILDEV_HOST: z.string(),
-  MAILDEV_PORT: z.coerce.number()
+  MAILDEV_PORT: z.coerce.number(),
 });
 
 type EnvironmentVariables = z.infer<typeof environmentVariablesValidator>;
@@ -20,7 +19,7 @@ class EnvironmentService {
   load() {
     //Read .env store variables , validate, store  & pt values into process.env
     //initialization method
-    
+
     if (this.environmentVariables) return;
 
     dotenv.config();
@@ -31,7 +30,7 @@ class EnvironmentService {
       console.log("Environment variables loaded");
     } catch (error) {
       if (error) {
-        throw new Error("Could´t load environment variables ");
+        throw new Error("Could not load environment variables ", error);
       }
     }
   }

@@ -23,14 +23,13 @@ services:
       - "8081:80"
     depends_on:
       - postgres
-  
-  redis:
-  image: redis:7
-  container_name: redis_local_book_shop
-  ports:
-    - '6379:6379'
-  restart: always
 
+  redis:
+    image: redis:7
+    container_name: redis_local_book_shop
+    restart: always
+    ports:
+      - "6379:6379"
 
 volumes:
   postgres_data:

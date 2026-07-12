@@ -1,26 +1,19 @@
-
 import { BookRepository } from "../repositories/BookRepository";
 import { Book } from "../Book";
 
 export interface BooksByUserUseCaseInput {
-
-    userId : number,
+  userId: number;
 }
 
 export class FindBooksByUserUseCase {
+  readonly bookRepository: BookRepository;
 
-    readonly bookRepository: BookRepository;
+  constructor(bookRepository: BookRepository) {
+    this.bookRepository = bookRepository;
+  }
 
-    constructor(bookRepository: BookRepository) {
-
-        this.bookRepository = bookRepository;
-    }
-
-    async execute(input : BooksByUserUseCaseInput ): Promise<Book[]>  {
-
-        const booksByUserId = await this.bookRepository.findByUser(input.userId)
-        return booksByUserId;
-
-    }
-        
+  async execute(input: BooksByUserUseCaseInput): Promise<Book[]> {
+    const booksByUserId = await this.bookRepository.findByUser(input.userId);
+    return booksByUserId;
+  }
 }

@@ -1,4 +1,4 @@
-import { BookGenre, BookStatus, Book } from "../Book";
+import { BookGenre, Book } from "../Book";
 import { BookRepository } from "../repositories/BookRepository";
 import { BadSyntaxError } from "../../errors/BadSyntaxError";
 import { genreValidator } from "../utils/genre-validator";

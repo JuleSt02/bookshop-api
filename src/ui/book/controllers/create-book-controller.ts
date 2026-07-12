@@ -42,6 +42,8 @@ export const createBookController = async (
     const { title, description, author, price, genre } =
       createBookValidationSchema.parse(req.body);
 
+    const userId = req.userId;
+
     const prismaBookRepository = new PrismaBookRepository();
 
     const createBookUseCase = new CreateBookUseCase(prismaBookRepository);
@@ -52,7 +54,7 @@ export const createBookController = async (
       author,
       price,
       genre,
-      ownerId: 1,
+      ownerId: userId!,
     });
 
     res.status(201).json(newBook);

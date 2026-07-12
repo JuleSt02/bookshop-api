@@ -10,22 +10,26 @@ const buyBookValidationSchema = z.object({
   id: z.coerce.number(),
 });
 
-export const buyBookController = async (req: Request, res: Response, next: NextFunction) => {
-    
-    const prismaBookRepository = new PrismaBookRepository();
-    const queueService = new BullQueuService();
-    const prismaUserRepository = new PrismaUserRepository();
-    const buyBookUseCase = new BuyBookUseCase(prismaBookRepository,queueService, prismaUserRepository);
-    
-    
-    try {
-        const {id} = buyBookValidationSchema.parse(req.params)
-        const authenticatedUserId = req.userId;
-        const soldBook = await buyBookUseCase.execute({id, authenticatedUserId})
-        res.status(200).json(soldBook);
-    } catch(error) {
-        next(error);
-    }
+export const buyBookController = async (
+  req: Request,
+  res: Response,
+  next: NextFunction,
+) => {
+  const prismaBookRepository = new PrismaBookRepository();
+  const queueService = new BullQueuService();
+  const prismaUserRepository = new PrismaUserRepository();
+  const buyBookUseCase = new BuyBookUseCase(
+    prismaBookRepository,
+    queueService,
+    prismaUserRepository,
+  );
 
-}
-
+  try {
+    const { id } = buyBookValidationSchema.parse(req.params);
+    const authenticatedUserId = req.userId;
+    const soldBook = await buyBookUseCase.execute({ id, authenticatedUserId });
+    res.status(200).json(soldBook);
+  } catch (error) {
+    next(error);
+  }
+};

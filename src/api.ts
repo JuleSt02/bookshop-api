@@ -9,7 +9,7 @@ const app = express();
 app.use(express.json());
 
 app.use("/books", booksRouter);
-app.use("/me", meRouter)
+app.use("/me", meRouter);
 
 app.use("/authentication", userRouter);
 

@@ -3,6 +3,12 @@ import { PrismaUserRepository } from "../../../infrastructure/user/repositories/
 import { SecuritityServiceImplementation } from "../../../infrastructure/services/SecurityServiceImplementation";
 import { LoginUserUseCase } from "../../../domain/user/use-cases/login-user-use-case";
 import { BadSyntaxError } from "../../../domain/errors/BadSyntaxError";
+import { z } from "zod";
+
+const loginUserSchema = z.object({
+  email: z.email("Invalid email."),
+  password: z.string().min(8, "Password must contain at least 8 characters."),
+});
 
 export const loginUserController = async (
   req: Request,
@@ -10,7 +16,7 @@ export const loginUserController = async (
   next: NextFunction,
 ) => {
   try {
-    const { email, password } = req.body;
+    const { email, password } = loginUserSchema.parse(req.body);
     if (!email || !password) {
       //Alternative : return next(newBadSyntaxError > continues to middleware)
       throw new BadSyntaxError("Email and password are mandatory."); //caught below > next (error) > errormiddleware > one error flow

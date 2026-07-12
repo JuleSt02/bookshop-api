@@ -5,13 +5,18 @@ import { z } from "zod";
 import { SecuritityServiceImplementation } from "../../../infrastructure/services/SecurityServiceImplementation";
 import { BadSyntaxError } from "../../../domain/errors/BadSyntaxError";
 
+const registerUserSchema = z.object({
+  email: z.email("Invalid email."),
+  password: z.string().min(8, "Password must contain at least 8 characters."),
+});
+
 export const registerUserController = async (
   req: Request,
   res: Response,
   next: NextFunction,
 ) => {
   try {
-    const { email, password } = req.body;
+    const { email, password } = registerUserSchema.parse(req.body);
 
     if (!email || !password) {
       //Alternative : return next(newBadSyntaxError > continues to middleware)
@@ -26,7 +31,7 @@ export const registerUserController = async (
     );
 
     const user = await registerUserUseCase.execute({ email, password });
-    res.status(200).json(user);
+    res.status(201).json(user);
   } catch (error) {
     next(error);
   }

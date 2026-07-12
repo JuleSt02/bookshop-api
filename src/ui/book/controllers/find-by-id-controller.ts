@@ -1,6 +1,4 @@
 import { Request, Response, NextFunction } from "express";
-import { BookGenre, BookStatus } from "../../../domain/book/Book";
-
 import { z } from "zod";
 import { PrismaBookRepository } from "../../../infrastructure/book/repositories/PrismaBookRepository";
 import { FindBookByIdUseCase } from "../../../domain/book/use-cases/find-by-id";

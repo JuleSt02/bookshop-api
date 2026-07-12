@@ -10,8 +10,8 @@ export class Entity {
   readonly updatedAt: Date;
 
   constructor(props: EntityProps) {
-    ((this.id = props.id),
-      (this.createdAt = props.createdAt),
-      (this.updatedAt = props.updatedAt));
+    this.id = props.id;
+    this.createdAt = props.createdAt;
+    this.updatedAt = props.updatedAt;
   }
 }
