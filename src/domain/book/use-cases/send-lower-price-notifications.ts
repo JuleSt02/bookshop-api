@@ -1,7 +1,7 @@
 import { QueueService } from "../../shared/QueueService";
 import { UserRepository } from "../../user/repositories/UserRepository";
 import { BookRepository } from "../repositories/BookRepository";
-import { BookStatus } from "../Book";
+import { Book, BookStatus } from "../Book";
 
 export class SendLowerPriceNotificationUseCase {
   private readonly bookRepository: BookRepository;
@@ -18,7 +18,7 @@ export class SendLowerPriceNotificationUseCase {
     this.queueService = queueService;
   }
 
-  async execute(): Promise<void> {
+  async execute(): Promise<void>{
     const currentDate = new Date();
     //copy of current Date
     const sevenDaysAgo = new Date(currentDate);

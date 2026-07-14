@@ -11,7 +11,9 @@
     "prettier:fix": "prettier --write src/",
     "typecheck": "tsc --noEmit",
     "test": "jest",
-    "prisma:sync": "npx prisma migrate dev"
+    "prisma:sync": "npx prisma migrate dev",
+    "seed": "tsx src/scripts/seed.ts"
+     
   },
   "repository": {
     "type": "git",

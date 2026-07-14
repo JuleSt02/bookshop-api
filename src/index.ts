@@ -14,7 +14,9 @@ app.listen(PORT, () => {
   console.log(`Server running on http://localhost:${PORT}`);
 });
 
-//CRON JOB
+// //CRON JOB TEST 
+// cron.schedule("* * * * *", cronLowerPriceNotification);
+
 cron.schedule("0 9 * * 1", cronLowerPriceNotification);
 
 const redisUrl = new URL(REDIS_URL);
