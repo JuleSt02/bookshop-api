@@ -1,15 +1,19 @@
 import { prisma } from "../infrastructure/prisma-client";
-
+import bcrypt from "bcrypt";
 const CREDENTIALS = {
   email: "test-user@domain.com",
   password: "RandomPassword123*",
 };
 
 async function seedFunction() {
+  await prisma.book.deleteMany();
+  await prisma.user.deleteMany();
+
+  const hashedPassword = await bcrypt.hash(CREDENTIALS.password, 10);
   const createdUser = await prisma.user.create({
     data: {
       email: CREDENTIALS.email,
-      password: CREDENTIALS.password,
+      password: hashedPassword,
     },
   });
 

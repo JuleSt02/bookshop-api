@@ -10,7 +10,7 @@
     "prettier": "prettier --check src/",
     "prettier:fix": "prettier --write src/",
     "typecheck": "tsc --noEmit",
-    "test": "jest",
+    "test": "jest --runInBand",
     "prisma:sync": "npx prisma migrate dev",
     "seed": "tsx src/scripts/seed.ts"
      

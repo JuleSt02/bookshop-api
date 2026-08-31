@@ -18,7 +18,7 @@ export class SendLowerPriceNotificationUseCase {
     this.queueService = queueService;
   }
 
-  async execute(): Promise<void>{
+  async execute(): Promise<void> {
     const currentDate = new Date();
     //copy of current Date
     const sevenDaysAgo = new Date(currentDate);

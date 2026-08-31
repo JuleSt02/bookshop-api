@@ -8,7 +8,7 @@ export const cronLowerPriceNotification = async () => {
   const prismaUserRepository = new PrismaUserRepository();
   const bullQueueService = new BullQueuService();
 
-  console.log("Cron-job starting")
+  console.log("Cron-job starting");
 
   const sendLowerPriceNotificationUseCase =
     new SendLowerPriceNotificationUseCase(
@@ -17,8 +17,7 @@ export const cronLowerPriceNotification = async () => {
       bullQueueService,
     );
   try {
-     await sendLowerPriceNotificationUseCase.execute();
-    
+    await sendLowerPriceNotificationUseCase.execute();
   } catch (error) {
     console.log(error);
   }

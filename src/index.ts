@@ -14,7 +14,7 @@ app.listen(PORT, () => {
   console.log(`Server running on http://localhost:${PORT}`);
 });
 
-// //CRON JOB TEST 
+// //CRON JOB TEST
 // cron.schedule("* * * * *", cronLowerPriceNotification);
 
 cron.schedule("0 9 * * 1", cronLowerPriceNotification);

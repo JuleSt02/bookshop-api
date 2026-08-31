@@ -1,4 +1,4 @@
-import { BookGenre } from "../../../../generated/prisma/enums";
+import { BookGenre } from "../Book";
 
 export const genreValidator = (input: string) => {
   //Enum --> object at runtime obtain values

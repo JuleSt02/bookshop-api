@@ -2,30 +2,25 @@ import request from "supertest";
 import { app } from "../api";
 import { prisma } from "../infrastructure/prisma-client";
 import { environmentService } from "../infrastructure/EnvironmentService";
-import { createUser, loginUser } from './test-utils/create-user';
+import { createUser, loginUser } from "./test-utils/create-user";
 import { createBook } from "./test-utils/create-book";
-
 
 import { BookStatus } from "../domain/book/Book";
 
+beforeAll(() => {
+  environmentService.load();
+});
 
+beforeEach(async () => {
+  await prisma.book.deleteMany();
+  await prisma.user.deleteMany();
+});
 
-  beforeAll(() => {
-    environmentService.load();
-  });
-
-  beforeEach(async () => {
-    await prisma.book.deleteMany();
-    await prisma.user.deleteMany();
-  });
-
-  afterAll(async () => {
-    await prisma.$disconnect();
-  });
+afterAll(async () => {
+  await prisma.$disconnect();
+});
 
 describe("POST /books/:id/buy", () => {
-
-
   test("Returns a response with status code 200 and the purchased book", async () => {
     const sellerResponse = await createUser({
       email: "seller@domain.com",
@@ -102,16 +97,16 @@ describe("POST /books/:id/buy", () => {
       soldAt: new Date(),
     });
 
-      // console.log("BOOK RETURNED BY CREATE BOOK HELPER:", book);
+    // console.log("BOOK RETURNED BY CREATE BOOK HELPER:", book);
 
-  //     const storedBook = await prisma.book.findUnique({
-  //       where: {
-  //      id: book.id,
-  //    },
-  //  });
+    //     const storedBook = await prisma.book.findUnique({
+    //       where: {
+    //      id: book.id,
+    //    },
+    //  });
 
-  // console.log("BOOK FOUND IN DATABASE:", storedBook);
-  
+    // console.log("BOOK FOUND IN DATABASE:", storedBook);
+
     const response = await request(app)
       .post(`/books/${book.id}/buy`)
       .set("Authorization", `Bearer ${accessToken}`);
@@ -141,4 +136,3 @@ describe("POST /books/:id/buy", () => {
     expect(response.status).toBe(403);
   });
 });
-
